@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://docs.oasis-open.org/xliff/v1.2/os/xliff-core-1.2-strict.xsd">
+  <file original="Triplex/Localizable.xcstrings" source-language="en" target-language="en" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="16.4" build-num="16F6"/>
+    </header>
+    <body>
+      <trans-unit id="%lld" xml:space="preserve">
+        <source>%lld</source>
+        <target state="new">%lld</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="%llds" xml:space="preserve">
+        <source>%llds</source>
+        <target state="new">%llds</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Best" xml:space="preserve">
+        <source>Best</source>
+        <target state="new">Best</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Current" xml:space="preserve">
+        <source>Current</source>
+        <target state="new">Current</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Dual" xml:space="preserve">
+        <source>Dual</source>
+        <target state="new">Dual</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Falling clock" xml:space="preserve">
+        <source>Falling clock</source>
+        <target state="new">Falling clock</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Fast to 100" xml:space="preserve">
+        <source>Fast to 100</source>
+        <target state="new">Fast to 100</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Let's play!" xml:space="preserve">
+        <source>Let's play!</source>
+        <target state="new">Let's play!</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Player Mode" xml:space="preserve">
+        <source>Player Mode</source>
+        <target state="new">Player Mode</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Single" xml:space="preserve">
+        <source>Single</source>
+        <target state="new">Single</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Time Mode" xml:space="preserve">
+        <source>Time Mode</source>
+        <target state="new">Time Mode</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Triplex © lvt" xml:space="preserve">
+        <source>Triplex © lvt</source>
+        <target state="new">Triplex © lvt</target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Your game is paused " xml:space="preserve">
+        <source>Your game is paused </source>
+        <target state="new">Your game is paused </target>
+        <note/>
+      </trans-unit>
+      <trans-unit id="Your score is %lld. &#10;Tap to start a new game" xml:space="preserve">
+        <source>Your score is %lld. 
+Tap to start a new game</source>
+        <target state="new">Your score is %lld. 
+Tap to start a new game</target>
+        <note/>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="Triplex/Triplex-InfoPlist.xcstrings" source-language="en" target-language="en" datatype="plaintext">
+    <header>
+      <tool tool-id="com.apple.dt.xcode" tool-name="Xcode" tool-version="16.4" build-num="16F6"/>
+    </header>
+    <body>
+      <trans-unit id="CFBundleName" xml:space="preserve">
+        <source>Triplex</source>
+        <target state="new">Triplex</target>
+        <note>Bundle name</note>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

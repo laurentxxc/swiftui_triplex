@@ -1,0 +1,48 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%lld" : {
+
+    },
+    "%llds" : {
+
+    },
+    "Best" : {
+
+    },
+    "Current" : {
+
+    },
+    "Dual" : {
+
+    },
+    "Falling clock" : {
+
+    },
+    "Fast to 100" : {
+
+    },
+    "Let's play!" : {
+
+    },
+    "Player Mode" : {
+
+    },
+    "Single" : {
+
+    },
+    "Time Mode" : {
+
+    },
+    "Triplex © lvt" : {
+
+    },
+    "Your game is paused " : {
+
+    },
+    "Your score is %lld. \nTap to start a new game" : {
+
+    }
+  },
+  "version" : "1.0"
+}

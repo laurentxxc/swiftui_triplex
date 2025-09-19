@@ -1,0 +1,17 @@
+{
+  "meta" : {
+    "version" : "2024-11-15"
+  },
+  "resources" : {
+    "achievements" : [
+      {
+        "archived" : false,
+        "points" : 10,
+        "referenceName" : "Reach50",
+        "repeatable" : false,
+        "showBeforeEarned" : true,
+        "vendorIdentifier" : "100"
+      }
+    ]
+  }
+}
