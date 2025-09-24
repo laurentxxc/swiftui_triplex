@@ -82,15 +82,18 @@ struct PlayView: View {
                         //                            Image("\(gameBoard.valueAt(pos: i))")
                         //                                .resizable()
                         //                                .aspectRatio(contentMode: .fit)
-
+                        
                         Text(convertText(asset:gameBoard.assets[i]))
                             .frame(width:80, height:80)
+                            .background(ASSET_BACK_STYLES[a.value(for:3)-1].gradient)
+                            .cornerRadius(10)
                             .font(.system(size: ASSET_FONT_SIZES[a.value(for: 1)-1]))
                             .foregroundColor(ASSET_FRONT_STYLES[a.value(for: 2)-1])
                     })
-                    .border(gameBoard.isAssetMarked(pos: i) ? Color.green : Color.accentColor,
-                            width: gameBoard.isAssetMarked(pos: i) ? 3 : 1)
-                    .background(ASSET_BACK_STYLES[a.value(for:3)-1].gradient)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.accentColor, lineWidth: gameBoard.isAssetMarked(pos: i) ? 5 : 0)
+                    )
                 }
             })
             .padding(10)
