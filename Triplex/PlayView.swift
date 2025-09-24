@@ -89,11 +89,23 @@ struct PlayView: View {
                             .cornerRadius(10)
                             .font(.system(size: ASSET_FONT_SIZES[a.value(for: 1)-1]))
                             .foregroundColor(ASSET_FRONT_STYLES[a.value(for: 2)-1])
+                            .colorInvertIf(gameBoard.lastMarkedAssets.keys.contains(i) && gameBoard.lastAssetPoints < 0)
                     })
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.accentColor, lineWidth: gameBoard.isAssetMarked(pos: i) ? 5 : 0)
+                            .stroke(Color.accentColor, lineWidth: gameBoard.isAssetMarked(pos: i) ||  gameBoard.lastMarkedAssets.keys.contains(i) ? 5 : 0)
                     )
+                    .scaleEffect(gameBoard.lastMarkedAssets.keys.contains(i) && gameBoard.lastAssetPoints >= 0 ? 0.8 : 1)
+                    .opacity(gameBoard.lastMarkedAssets.keys.contains(i) && gameBoard.lastAssetPoints >= 0 ? 0.10 : 1.0)
+                    .overlay(alignment: .center) {
+                        if (gameBoard.lastMarkedAssets.keys.contains(i) && gameBoard.lastAssetPoints >= 0) {
+                            Text("+\(gameBoard.lastAssetPoints)")
+                                .font(.title)
+                                .fontWeight(.heavy)
+                                .foregroundStyle(Color("AccentColor"))
+                        }
+                    }
+                    .animation(.easeOut(duration: 0.2), value: gameBoard.lastMarkedAssets)
                 }
             })
             .padding(10)
@@ -104,8 +116,7 @@ struct PlayView: View {
                         .font(.title)
                         .fontWeight(.heavy)
                         .foregroundColor(Color("AccentColor"))
-                }
-                if gameBoard.gameState == .not_started {
+                } else if gameBoard.gameState == .not_started {
                     Text("Your score is \(gameBoard.score). \nTap to start a new game")
                         .font(.title)
                         .fontWeight(.heavy)
@@ -187,7 +198,18 @@ struct PlayView: View {
 
 
 #Preview {
-    let gb = GameBoardModel(nbAssets: 24)
+    let gb = GameBoardModel(nbAssets: 24, isTest: true)
     PlayView(gameBoard: gb).onAppear(){gb.startGame()}
 //        .preferredColorScheme(.dark) // forces dark mode
+}
+
+extension View {
+    @ViewBuilder
+    func colorInvertIf(_ condition: Bool) -> some View {
+        if condition {
+            self.colorInvert()
+        } else {
+            self
+        }
+    }
 }

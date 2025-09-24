@@ -18,11 +18,14 @@ enum GameState {
 
 class GameBoardModel: ObservableObject {
     private let nbAssets: Int
+    private let isTest: Bool
     @Published var assets:[Asset] = []
     @Published var markedAssets:[Int:Asset] = [:]
     @Published var score:Int = 0
     @Published var bestScore:Int = 0
     @Published var gameState:GameState = .not_started
+    @Published var lastMarkedAssets: [Int:Asset] = [:]
+    @Published var lastAssetPoints: Int = 0
     
     private var timer: AnyCancellable?
     private var audioPlayer: AVAudioPlayer?
@@ -30,16 +33,22 @@ class GameBoardModel: ObservableObject {
     @Published var timeRemaining:Int = 180
     
     let MAX_TIME = 180
-    let SCORE_PENALTY = -5
+    let SCORE_PENALTY = -1
     let SCORE_BONUS = 1
     let TIME_EXTRA = 10
     
-    init (nbAssets: Int) {
+    init (nbAssets: Int, isTest: Bool = false) {
         self.nbAssets = nbAssets
+        self.isTest = isTest
         initBoardAssets()
     }
     
     func initBoardAssets() {
+        guard isTest == false else {
+            assets = Array(repeating: Asset(values: [1,1,1,1]), count: nbAssets)
+            return
+        }
+        
         let nbMatchingAssets = nbAssets / 2
         var fillidx = 0
         
@@ -78,16 +87,22 @@ class GameBoardModel: ObservableObject {
         
         if markedAssets.count == AssetsFactory.NB_VALUES_PER_CRITERIA {
             let matchinglevel = AssetsFactory.shared.checkAssets(assets: [Asset](markedAssets.values))
+            // keeping last marked assets
+            lastMarkedAssets = markedAssets
+            
             if (matchinglevel<0) {
                 // assets are not matching
-                addToScore(value:SCORE_PENALTY)
+                lastAssetPoints = SCORE_PENALTY
+                addToScore(value:lastAssetPoints*3)
                 
                 // play wrong sound
                 SoundManager.shared.playSound("wrong")
                 
             } else {
                 // assets are matching
-                addToScore(value: SCORE_BONUS * (markedAssets.count + 1 - matchinglevel))
+                // won points = <base score> * <number of diff criteria on the match assets> * number of assets
+                lastAssetPoints = SCORE_BONUS * (markedAssets.count + 1 - matchinglevel)
+                addToScore(value: lastAssetPoints  * markedAssets.count)
                 timeRemaining += TIME_EXTRA
                 
                 //play good sound
@@ -95,6 +110,7 @@ class GameBoardModel: ObservableObject {
 
                 //replace marked assets with new ones
                 // collect marked assets keys
+                // capture which tiles matched so the view can animate them
                 let indexes:[Int] = markedAssets.keys.shuffled()
 
                 // generated random assets for each index except last one
@@ -113,6 +129,12 @@ class GameBoardModel: ObservableObject {
                 while (i_a2 == i_a3) && (i_a2 == i_a1)
                 
                     assets[i_a3] = AssetsFactory.shared.generateMatchingAsset(first: assets[i_a1], second: assets[i_a2])
+            }
+
+            // clear after a short delay so the animation can play
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.lastMarkedAssets = [:]
+                self?.lastAssetPoints = 0
             }
             
             //reset all mark
