@@ -171,6 +171,9 @@ class GameBoardModel: ObservableObject {
         timeRemaining = MAX_TIME
         score = 0
         gameState = .running
+        markedAssets = [:]
+        lastMarkedAssets = [:]
+        lastAssetPoints = 0
         startTimer()
     }
     
