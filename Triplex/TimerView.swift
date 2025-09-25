@@ -34,6 +34,7 @@ struct TimerView: View {
     }
     
     private var progress: CGFloat {
+        guard gameBoard.timeRemaining < gameBoard.MAX_TIME else { return 1 }
         return CGFloat(gameBoard.timeRemaining) / CGFloat(gameBoard.MAX_TIME)
     }
 }
