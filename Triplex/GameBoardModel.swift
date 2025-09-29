@@ -9,6 +9,9 @@ import Foundation
 import SwiftUI
 import Combine // needed for Timer usage
 import AVFoundation
+import CloudKit
+
+// To enable iCloud Key-Value Store for bestScore, build with `-DUSE_ICLOUD_KVS`
 
 enum GameState {
     case not_started
@@ -17,12 +20,23 @@ enum GameState {
 }
 
 class GameBoardModel: ObservableObject {
+    private let BEST_SCORE_KEY = "bestScore"
     private let nbAssets: Int
     private let isTest: Bool
     @Published var assets:[Asset] = []
     @Published var markedAssets:[Int:Asset] = [:]
     @Published var score:Int = 0
-    @Published var bestScore:Int = 0
+    @Published var bestScore: Int = 0 {
+        didSet {
+#if USE_ICLOUD_KVS
+            NSUbiquitousKeyValueStore.default.set(bestScore, forKey: BEST_SCORE_KEY)
+            NSUbiquitousKeyValueStore.default.synchronize()
+#else
+            // Local storage fallback for bestScore
+            UserDefaults.standard.set(bestScore, forKey: BEST_SCORE_KEY)
+#endif
+        }
+    }
     @Published var gameState:GameState = .not_started
     @Published var lastMarkedAssets: [Int:Asset] = [:]
     @Published var lastAssetPoints: Int = 0
@@ -41,7 +55,35 @@ class GameBoardModel: ObservableObject {
         self.nbAssets = nbAssets
         self.isTest = isTest
         initBoardAssets()
+        
+#if USE_ICLOUD_KVS
+        if let cloudScore = NSUbiquitousKeyValueStore.default.object(forKey: BEST_SCORE_KEY) as? Int {
+            bestScore = cloudScore
+        }
+        NotificationCenter.default.addObserver(self, selector: #selector(iCloudKeysDidChange(_:)), name: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default)
+#else
+        // Load bestScore from local UserDefaults as fallback
+        bestScore = UserDefaults.standard.integer(forKey: BEST_SCORE_KEY)
+#endif
     }
+    
+    deinit {
+#if USE_ICLOUD_KVS
+        NotificationCenter.default.removeObserver(self)
+#endif
+    }
+    
+#if USE_ICLOUD_KVS
+    @objc private func iCloudKeysDidChange(_ notification: Notification) {
+        let store = NSUbiquitousKeyValueStore.default
+        let newScore = store.longLong(forKey: BEST_SCORE_KEY)
+        if newScore != Int64(bestScore) {
+            DispatchQueue.main.async {
+                self.bestScore = Int(newScore)
+            }
+        }
+    }
+#endif
     
     func initBoardAssets() {
         guard isTest == false else {
@@ -128,7 +170,7 @@ class GameBoardModel: ObservableObject {
                 repeat { i_a2 = Int.random(in: 0..<nbAssets)}
                 while (i_a2 == i_a3) && (i_a2 == i_a1)
                 
-                    assets[i_a3] = AssetsFactory.shared.generateMatchingAsset(first: assets[i_a1], second: assets[i_a2])
+                assets[i_a3] = AssetsFactory.shared.generateMatchingAsset(first: assets[i_a1], second: assets[i_a2])
             }
 
             // clear after a short delay so the animation can play
