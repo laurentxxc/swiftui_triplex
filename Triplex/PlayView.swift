@@ -200,7 +200,12 @@ struct PlayView: View {
 #Preview {
     let gb = GameBoardModel(nbAssets: 24, isTest: true)
     PlayView(gameBoard: gb).onAppear(){gb.startGame()}
-//        .preferredColorScheme(.dark) // forces dark mode
+    //        .preferredColorScheme(.dark) // forces dark mode
+#if os(macOS)
+        .frame(minWidth: 420, idealWidth: 420, maxWidth: 420,
+               minHeight: 800, idealHeight: 800, maxHeight: 800)
+//        .windowResizability(.contentSize)
+#endif
 }
 
 extension View {

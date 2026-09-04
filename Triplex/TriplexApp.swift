@@ -18,9 +18,14 @@ struct TriplexApp: App {
         let gb = GameBoardModel(nbAssets: 24)
         WindowGroup {
 //            StartView()
-            PlayView(gameBoard: gb).onAppear(){
-                gb.startGame()
-            }
+            PlayView(gameBoard: gb).onAppear(){gb.startGame()}
+#if os(macOS)
+                .frame(minWidth: 420, idealWidth: 420, maxWidth: 420,
+               minHeight: 800, idealHeight: 800, maxHeight: 800)
+#endif
         }
+#if os(macOS)
+        .windowResizability(.contentSize)
+#endif
     }
 }
